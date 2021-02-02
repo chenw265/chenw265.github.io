@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        Chenw
+    </title>
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            PubMed的检索体验改善
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <p>最近手里有两个项目，感觉都没啥时间空出来做点闲事，总是东奔西跑。今天趁着打不起精神学习，就跑来写一篇关于PubMed的检索体验改善的一些技巧。</p>
+<p>PubMed是作为医学生的我们最常用到的工具吧，至少现在的我就是这样。虽然用的多，但好像从来就没有能够好好地利用好它找到自己满意的文献。最近看了一些大牛建议，学会了一些技巧，故在此作下笔记。</p>
+<p>先放一张图，改善后的PubMed长这个样子：</p>
+<div align = "center">
+<img src = "https://raw.githubusercontent.com/chenw265/blogimage/master/PubMed%E6%94%B9%E5%96%84.jpg " />
+</div>
+
+<p>看上去比原先好多了。</p>
+<p>①显示具体的JCR分区、影响因子、中科院分区和当前热度，在谷歌上安装插件<strong>Scholarscope</strong>即可</p>
+<p>②这个是获取全文的神器，大部分文章只要点一下”Full Text(PDF)”就可以轻松下载你想要的全文。不能说全部，大约90+%蚊帐都能下载到。这一行其实也能看到IF的，只是图中给的好像没有爬取到而已。这个是用插件<strong>PubMedy</strong>实现的</p>
+<p>③这个是我们图书馆当时开讲座的时候了解到的，它是通过链接我们自己学校已购买资源，自动帮我们寻找全文。当③显示绿色时，说明有找到全文；灰色为未找到。有时候可以补充一下②。这个时通过插件<strong>Kopernio</strong>实现的</p>
+<p>④这个时显示期刊热度（IF）的一个条。它是插件<strong>Eigenfactorizer</strong>实现的 </p>
+<p>⑤这是NCBI自己自带的一个<strong>Fliter</strong>，不过是需要我们自己去设置的。具体设置方法如下：</p>
+<ul>
+<li><p>在<a target="_blank" rel="noopener" href="https://www.ncbi.nlm.nih.gov/pubmed"><strong>NCBI</strong></a>上注册自己的账号（右上角），然后登陆（登录后才能进行管理自己的Fliters）</p>
+<div align = "center">
+<img src = "https://raw.githubusercontent.com/chenw265/blogimage/master/Pubmed-1.jpg " width = "400" height = "400"/>
+</div>
+</li>
+<li><p>然后点击右边栏的“Manage Fliters”进入如下界面：</p>
+<div align = "center">
+<img src = "https://raw.githubusercontent.com/chenw265/blogimage/master/Pubmed-2.jpg " width = "400" height = "400"/>
+</div>
+</li>
+<li><p>然后点击上图中的“creat custom fliter”，进入下面的界面：</p>
+<div align = "center">
+<img src = "https://raw.githubusercontent.com/chenw265/blogimage/master/Pubmed-3.jpg "/>
+</div>
+</li>
+<li><p>接着，要在“Query terms”里面输入影响因子对应的期刊。也就是如上图，里面输入的都是影响因子大于20的期刊的名字的代码。期刊的影响因子每年6月份左右都会更新，所以我们每年都要进行更换才能保证有准确的筛选。</p>
+</li>
+<li><p>输入代码之后，点击“Test This Query”，如果出现上图所示“……result found”说明代码没有问题，点击“Save Fliter”即可。</p>
+</li>
+<li><p>这里附上<a target="_blank" rel="noopener" href="https://github.com/chenw265/blogimage/raw/master/2018%E5%B9%B4SCI%E5%BD%B1%E5%93%8D%E5%9B%A0%E5%AD%90%E5%BD%92%E7%B1%BB%E5%88%86%E6%9E%90.docx"><strong>2018年的期刊影响因子的代码</strong></a>，只要把下载下来的文献代码按照对应的影响因子粘贴复制过去就好了。</p>
+</li>
+</ul>
+<p>任务繁忙，今天就先记到这里。</p>
+
+    </div>
+
+    
+</div>
+    <div class="footer" id="footer">
+    <p>Copyright © 2020 <a class="flink" target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>-<a class="flink" target="_blank" rel="noopener" href="https://github.com/sanjinhub/hexo-theme-geek">Geek</a>.
+        <label class="el-switch el-switch-green el-switch-sm" style="vertical-align: sub;">
+            <input type="checkbox" name="switch" id="update_style">
+            <span class="el-switch-style"></span>
+        </label>
+<!--         <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+        </script> -->
+    </p>
+</div>
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="CmCti21ooOOIzFOhEyFkFvR0-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="FqiyUqbg7McKN2eG0MCewupf">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+    color: #698fca;
+}
+
+.v .vlist .vcard .vhead .vsys {
+    color: #3a3e4a;
+}
+
+.v .vlist .vcard .vh .vmeta .vat {
+    color: #638fd5;
+}
+
+.v .vlist .vcard .vhead .vnick {
+    color: #6ba1ff;
+}
+
+.v a {
+    color: #8696b1;
+}
+
+.v .vlist .vcard .vhead .vnick:hover {
+    color: #669bfc;
+}
+</style>
+</body>
+
+</html>
