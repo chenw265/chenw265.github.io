@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>
+        Chenw
+    </title>
+    
+<link rel="stylesheet" href="/libs/highlight/styles/monokai-sublime.css">
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body id="bodyx">
+    <div class="hd posts">
+    <a href="/index.html"><i class="fa fa-reply replay-btn" aria-hidden="true"></i></a>
+    <div class="post-title">
+        <p>
+            Download and sort out the TCGA data
+        </p>
+        <hr>
+    </div>
+    <div class="post-content">
+        <p>I don’t know how many times I have downloaded the data from the TCGA database. However, I had to go back and read the tutorial every time I did it. Besides, I still spend about 30 hours to get the data, and I still don’t know whether that’s what I want.  To be frankly, I’m now speechless at my stupidity. 🙄</p>
+<p>To prevent this from happening again, I decide to record what I did today, including the steps of the procedure and code.</p>
+<h3 id="Data-Download"><a href="#Data-Download" class="headerlink" title="Data Download"></a>Data Download</h3><ul>
+<li><p>Enter into the <strong><a target="_blank" rel="noopener" href="https://portal.gdc.cancer.gov/">TCGA database</a></strong> website, click the <strong>“Repository”</strong>；</p>
+</li>
+<li><p>Then find the buttons <strong>“Files”</strong> and <strong>“Cases”</strong> in the right column, pick up the data you want;</p>
+</li>
+<li><p>After that, click dark blue button on the center <strong>“Add All Files to Cart”</strong>, add your data to the Cart;</p>
+</li>
+<li><p>Click <strong>”Cart”</strong> on the top right corner, then you will go to the “Cart”, where you can download your data;</p>
+</li>
+<li><p>Then click  <strong>”Download”</strong>, there will give you to options:  <strong>”Manifest“</strong> and  <strong>”Cart”</strong>;</p>
+</li>
+<li><p>If your data is not so big, you could click <strong>”Cart”</strong> and download your data directly. But if your data is too big to download, you should choose <strong>”Manifest“</strong>, you can use it download the data with <a target="_blank" rel="noopener" href="https://gdc.cancer.gov/access-data/gdc-data-transfer-tool"><strong>gdc data transfer tool</strong></a>, which can be downloaded in TCGA website;</p>
+</li>
+<li><p>Install the gdc data transfer tool, then open “cmd” interface, enter the following code: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdc-client download -m path&#x2F;to&#x2F;manifest_file -d path&#x2F;to&#x2F;download_dir</span><br></pre></td></tr></table></figure></li>
+<li><p>Wait for some time, the data will be downloaded in your computer.</p>
+</li>
+</ul>
+<p>After that, we can only start sorting out our data by using R and Excel.😬 </p>
+<p>The code is showed below👇👇👇：</p>
+<h3 id="Clinical-Data-Extraction"><a href="#Clinical-Data-Extraction" class="headerlink" title="Clinical Data Extraction"></a>Clinical Data Extraction</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Load the packages needed</span></span><br><span class="line">library(<span class="string">&quot;XML&quot;</span>)</span><br><span class="line">library(<span class="string">&quot;methods&quot;</span>)</span><br><span class="line">library(<span class="string">&quot;data.table&quot;</span>)</span><br><span class="line">library(<span class="string">&quot;tidyr&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#Define the path</span></span><br><span class="line">path = <span class="string">&quot;your_download_dir&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Acquire the names of all files under the path</span></span><br><span class="line">folders = list.files(path)</span><br><span class="line"></span><br><span class="line"><span class="comment">#creat dataframe used to store data</span></span><br><span class="line">clinical_data = data.frame()</span><br><span class="line"></span><br><span class="line"><span class="comment">#Deal with the first file</span></span><br><span class="line">fd1 = folders[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#Acquire the name of xml file in the folder, and define it </span></span><br><span class="line"><span class="string">&quot;files_name_xml&quot;</span></span><br><span class="line">files_name = list.files(paste(path, <span class="string">&quot;/&quot;</span>, fd1, sep = <span class="string">&quot;&quot;</span>))</span><br><span class="line">files_name_xml = files_name[grepl(<span class="string">&#x27;.xml&#x27;</span>, files_name)]</span><br><span class="line"></span><br><span class="line"><span class="comment">#Extract the data from xml file using xmlToDataFrame</span></span><br><span class="line">mydata = t(xmlToDataFrame(paste(path, <span class="string">&quot;/&quot;</span>,fd1,<span class="string">&quot;/&quot;</span>, files_name_xml,sep = <span class="string">&quot;&quot;</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment">#Extract the rowname and combind it with the original dataftame, which will be conivent for later data matching</span></span><br><span class="line">mydata &lt;- data.frame(cbind(row.names(mydata), mydata))</span><br><span class="line">mydata &lt;- unite(mydata, <span class="string">&quot;1&quot;</span>, <span class="built_in">c</span>(<span class="string">&quot;X2&quot;</span>, <span class="string">&quot;X3&quot;</span>), sep = <span class="string">&quot;&quot;</span>, remove = <span class="built_in">T</span>)  <span class="comment">#I have this extra steps because I don&#x27;t know why there are two columns in &quot;mydata&quot;</span></span><br><span class="line"><span class="built_in">names</span>(mydata) = <span class="built_in">c</span>(<span class="string">&quot;rn&quot;</span>, fd1)</span><br><span class="line"></span><br><span class="line"><span class="comment">#Store the data in dataframe</span></span><br><span class="line">clinicaldata = mydata</span><br><span class="line"></span><br><span class="line"><span class="comment">#Circulation --- Repeat the above steps</span></span><br><span class="line"><span class="keyword">for</span>(fd <span class="keyword">in</span> folders[<span class="number">2</span>:<span class="built_in">length</span>(folders)])&#123;</span><br><span class="line">  files_name = list.files(paste(path, <span class="string">&quot;/&quot;</span>, fd, sep = <span class="string">&quot;&quot;</span>))</span><br><span class="line">  files_name_xml = files_name[grepl(<span class="string">&#x27;.xml&#x27;</span>, files_name)]</span><br><span class="line">  mydata = t(xmlToDataFrame(paste(path, <span class="string">&quot;/&quot;</span>, fd, <span class="string">&quot;/&quot;</span>, files_name_xml, sep = <span class="string">&quot;&quot;</span>)))</span><br><span class="line">  mydata &lt;- data.frame(cbind(row.names(mydata), mydata))</span><br><span class="line">  mydata &lt;- unite(mydata, <span class="string">&quot;1&quot;</span>, <span class="built_in">c</span>(<span class="string">&quot;X2&quot;</span>, <span class="string">&quot;X3&quot;</span>), sep = <span class="string">&quot;&quot;</span>, remove = <span class="built_in">T</span>)</span><br><span class="line">  <span class="built_in">names</span>(mydata) = <span class="built_in">c</span>(<span class="string">&quot;rn&quot;</span>, fd)</span><br><span class="line">    </span><br><span class="line">  <span class="comment">#This steps is to combind the data acquired above step to the dataframe acquired from the last circle</span></span><br><span class="line">  clinicaldata = merge(clinicaldata, mydata, by = <span class="string">&quot;rn&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#Export the data as &quot;csv&quot; file</span></span><br><span class="line">write.csv(clinicaldata, <span class="string">&quot;D:/mydata/clinicaldatamerge1.csv&quot;</span>, row.names = <span class="built_in">F</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#One last step to succsee: using the Excel, replace the &quot;NA&quot; with &quot;&quot;, and then the other way around, replace the &quot;&quot;, with &quot;NA&quot;. Transpose it finally.</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Gene-Expression-Data-Extraction"><a href="#Gene-Expression-Data-Extraction" class="headerlink" title="Gene Expression Data Extraction"></a>Gene Expression Data Extraction</h3><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Define path</span></span><br><span class="line">path = <span class="string">&quot;C:/Users...&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Acquire the names of all file under the path</span></span><br><span class="line">folders = list.files(path)</span><br><span class="line"></span><br><span class="line">gene_expression_data = data.frame()</span><br><span class="line"></span><br><span class="line"><span class="comment">#data sort</span></span><br><span class="line">fd1 = folders[<span class="number">1</span>]</span><br><span class="line">files_name = list.files(paste(path, <span class="string">&quot;/&quot;</span>, fd1, sep = <span class="string">&quot;&quot;</span>))</span><br><span class="line"></span><br><span class="line">files_name_gz = files_name[grepl(<span class="string">&#x27;.htseq.counts&#x27;</span>, files_name)]</span><br><span class="line">mydata = read.table(gzfile(paste(path, <span class="string">&quot;/&quot;</span>,fd1,<span class="string">&quot;/&quot;</span>, files_name_gz,sep = <span class="string">&quot;&quot;</span>)))</span><br><span class="line"></span><br><span class="line"><span class="built_in">names</span>(mydata) = <span class="built_in">c</span>(<span class="string">&quot;ENSG_ID&quot;</span>, fd1)</span><br><span class="line"></span><br><span class="line">gene_expression_data = mydata</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(fd <span class="keyword">in</span> folders[<span class="number">2</span>:<span class="built_in">length</span>(folders)])&#123;</span><br><span class="line">  files_name = list.files(paste(path, <span class="string">&quot;/&quot;</span>, fd, sep = <span class="string">&quot;&quot;</span>))</span><br><span class="line">  files_name_gz = files_name[grepl(<span class="string">&#x27;.htseq.counts&#x27;</span>, files_name)]</span><br><span class="line">  mydata = read.table(gzfile(paste(path, <span class="string">&quot;/&quot;</span>, fd, <span class="string">&quot;/&quot;</span>, files_name_gz, sep = <span class="string">&quot;&quot;</span>)))</span><br><span class="line">  <span class="built_in">names</span>(mydata) = <span class="built_in">c</span>(<span class="string">&quot;ENSG_ID&quot;</span>, fd)</span><br><span class="line">  gene_expression_data = merge(gene_expression_data, mydata, by=<span class="string">&quot;ENSG_ID&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">write.csv(gene_expression_data, <span class="string">&quot;D:/mydata/gene_expression_data.csv&quot;</span>, row.names = <span class="built_in">F</span>)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+        <hr class="fhr">
+        <div id="vcomments"></div>
+    
+</div>
+    <div class="footer" id="footer">
+    <p>Copyright © 2020 <a class="flink" target="_blank" rel="noopener" href="https://hexo.io">Hexo</a>-<a class="flink" target="_blank" rel="noopener" href="https://github.com/sanjinhub/hexo-theme-geek">Geek</a>.
+        <label class="el-switch el-switch-green el-switch-sm" style="vertical-align: sub;">
+            <input type="checkbox" name="switch" id="update_style">
+            <span class="el-switch-style"></span>
+        </label>
+<!--         <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cspan id='cnzz_stat_icon_1278548644'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/stat.php%3Fid%3D1278548644%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+        </script> -->
+    </p>
+</div>
+<input type="hidden" id="web_style" value="black">
+<input type="hidden" id="valine_appid" value="CmCti21ooOOIzFOhEyFkFvR0-gzGzoHsz">
+<input type="hidden" id="valine_appKey" value="FqiyUqbg7McKN2eG0MCewupf">
+
+<script src="/libs/jquery.min.js"></script>
+
+
+<script src="/libs/highlight/highlight.pack.js"></script>
+
+<script src='//cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+
+<script src="/js/js.js"></script>
+
+<style type="text/css">
+.v * {
+    color: #698fca;
+}
+
+.v .vlist .vcard .vhead .vsys {
+    color: #3a3e4a;
+}
+
+.v .vlist .vcard .vh .vmeta .vat {
+    color: #638fd5;
+}
+
+.v .vlist .vcard .vhead .vnick {
+    color: #6ba1ff;
+}
+
+.v a {
+    color: #8696b1;
+}
+
+.v .vlist .vcard .vhead .vnick:hover {
+    color: #669bfc;
+}
+</style>
+</body>
+
+</html>
